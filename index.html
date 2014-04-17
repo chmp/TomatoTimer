@@ -2,9 +2,11 @@
 <head>
     <title>tomato timer</title>
     <script type="text/javascript" src="contrib/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="contrib/q.js"></script>
     <script type="text/javascript" src="lib/js/TimeAccess.js"></script>
     <script type="text/javascript" src="lib/js/History.js"></script>
     <script type="text/javascript" src="lib/js/Timer.js"></script>
+    <script type="text/javascript" src="lib/js/TimerUI.js"></script>
 
     <link href="lib/css/main.css" rel="stylesheet" type="text/css" />
 </head>
@@ -36,7 +38,11 @@ exports.timeLongBreak = 15 * 60;
 
 exports.run = function() 
 {
-    var timer = new exports.Timer({ id: "timer" });
+    var timer = window.timer = new exports.TimerUI({ 
+        id: "timer",
+        alarmId: "alarm"
+    });
+
     var history = new exports.History({ id: "history", load: true });
 
     $("#button-start").click(function() {
