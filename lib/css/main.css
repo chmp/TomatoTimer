@@ -1,0 +1,86 @@
+#outer {
+    height: 20em;
+    width: 34em;
+    margin: 5em auto;
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+h1 {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    
+    color: #333333;
+    width: 100%;
+    margin: 0em;
+    padding: 0em;
+    text-align: right;
+}
+
+#timer {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    
+    font-size: 2em;
+    width: 100%;
+    text-align: center;
+    padding: 0.5em;
+    margin: 0.75em 0em;
+    height: 2em;
+}
+
+#timer.stopped {
+    color: #FFFFFF;
+    background-color: #CC0000;
+
+}
+
+#timer.running {
+    color: #FFFFFF;
+    background-color: #00AA00;
+
+}
+
+#controls {
+    font-size: 1em;
+    width: 100%;
+    padding: 0em;
+    margin: 0em;
+    text-align: center;
+}
+
+#controls button {
+    background-color: #FFFFFF;
+    border: 1px solid black;
+    font-size: 1em;
+    margin: 0.5em;
+    display: inline-block;
+    padding: 0.25em;
+    width: 7em;
+}
+
+#controls button:hover {
+    background-color: #F5F5F5;
+}
+
+#controls button:active {
+    background-color: #CCCCCC;
+}
+
+button#interruption {
+    width: 3em;
+}
+
+button#Stop {
+    width: 3em;
+    color: #CC0000;
+}
+
+#history {
+    font-size: 0.75em;
+    margin-top: 2em;
+    color: #CCCCCC;
+}
+
