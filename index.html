@@ -2,10 +2,11 @@
 <head>
     <title>tomato timer</title>
     <script type="text/javascript" src="contrib/jquery-2.1.0.min.js"></script>
-    <script type="text/javascript" src="contrib/q.js"></script>
+    <script type="text/javascript" src="contrib/q.min.js"></script>
     <script type="text/javascript" src="lib/js/TimeAccess.js"></script>
     <script type="text/javascript" src="lib/js/History.js"></script>
     <script type="text/javascript" src="lib/js/Timer.js"></script>
+    <script type="text/javascript" src="lib/js/FlowTimer.js"></script>
     <script type="text/javascript" src="lib/js/TimerUI.js"></script>
 
     <link href="lib/css/main.css" rel="stylesheet" type="text/css" />
@@ -32,9 +33,22 @@ var tt = window.tt || {};
 (function(){
 var exports = tt;
 
-exports.timeWork = 25 * 60;
-exports.timeShortBreak = 5 * 60;
-exports.timeLongBreak = 15 * 60;
+
+exports.intervals = {};
+exports.intervals["work"] = {
+    label: "Work",
+    duration: minutesInSeconds(25)
+};
+
+exports.intervals["short"] = {
+    label: "Short break",
+    duration: minutesInSeconds(5)
+}
+
+exports.intervals["long"] = {
+    label: "Long break",
+    duration: minutesInSeconds(15)
+}
 
 exports.run = function() 
 {
@@ -44,21 +58,19 @@ exports.run = function()
     });
 
     var history = new exports.History({ id: "history", load: true });
+    
+    var startInterval = function(type) {
+        var interval = exports.intervals[type];
+        history.add(interval.label);
+        
+        return timer.start(interval.duration)
+        .then(function(){ console.log("done"); })
+        .catch(function(){ console.log("aborted"); });
+    }
 
-    $("#button-start").click(function() {
-        timer.start(exports.timeWork);
-        history.add("Work");
-    });
-
-    $("#short-break").click(function() {
-        timer.start(exports.timeShortBreak);
-        history.add("Short break");
-    });
-
-    $("#long-break").click(function() {
-        timer.start(exports.timeLongBreak);
-        history.add("Long break");
-    });
+    $("#button-start").click(startInterval.bind(this, "work"));
+    $("#short-break").click(startInterval.bind(this, "short"));
+    $("#long-break").click(startInterval.bind(this, "long"));
 
     $("#interruption").click(function() { 
         history.add("Interruption");
@@ -74,6 +86,9 @@ exports.run = function()
 
 $(document).ready(tt.run);
 
+function minutesInSeconds(time) { 
+    return time * 60; 
+}
 </script>
 </body>
 </html>
