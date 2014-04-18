@@ -33,7 +33,6 @@ var tt = window.tt || {};
 (function(){
 var exports = tt;
 
-
 exports.intervals = {};
 exports.intervals["work"] = {
     label: "Work",
@@ -52,18 +51,20 @@ exports.intervals["long"] = {
 
 exports.run = function() 
 {
-    var timer = window.timer = new exports.TimerUI({ 
+    var state = exports.state = {};
+
+    state.timer = new exports.TimerUI({ 
         id: "timer",
         alarmId: "alarm"
     });
 
-    var history = new exports.History({ id: "history", load: true });
+    state.history = new exports.History({ id: "history", load: true });
     
     var startInterval = function(type) {
         var interval = exports.intervals[type];
-        history.add(interval.label);
+        state.history.add(interval.label);
         
-        return timer.start(interval.duration)
+        return state.timer.start(interval.duration)
         .then(function(){ console.log("done"); })
         .catch(function(){ console.log("aborted"); });
     }
@@ -73,12 +74,12 @@ exports.run = function()
     $("#long-break").click(startInterval.bind(this, "long"));
 
     $("#interruption").click(function() { 
-        history.add("Interruption");
+        state.history.add("Interruption");
     });
 
     $("#stop").click(function() {
-        timer.stop();
-        history.add("Stop");
+        state.timer.stop();
+        state.history.add("Stop");
     });
 };
 
