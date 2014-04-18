@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>tomato timer</title>
+    <link href="lib/css/main.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="contrib/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="contrib/q.min.js"></script>
     <script type="text/javascript" src="lib/js/TimeAccess.js"></script>
@@ -8,8 +9,7 @@
     <script type="text/javascript" src="lib/js/Timer.js"></script>
     <script type="text/javascript" src="lib/js/FlowTimer.js"></script>
     <script type="text/javascript" src="lib/js/TimerUI.js"></script>
-
-    <link href="lib/css/main.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="lib/js/main.js"></script>
 </head>
 <body>
     <div id="outer">
@@ -26,70 +26,5 @@
         <div id="history"></div>
         <audio id="alarm" src="lib/alarm.wav" preload="auto"></audio>
     </div>
-
-<script type="text/javascript">
-var tt = window.tt || {};
-
-(function(){
-var exports = tt;
-
-exports.intervals = {};
-exports.intervals["work"] = {
-    label: "Work",
-    duration: minutesInSeconds(25)
-};
-
-exports.intervals["short"] = {
-    label: "Short break",
-    duration: minutesInSeconds(5)
-}
-
-exports.intervals["long"] = {
-    label: "Long break",
-    duration: minutesInSeconds(15)
-}
-
-exports.run = function() 
-{
-    var state = exports.state = {};
-
-    state.timer = new exports.TimerUI({ 
-        id: "timer",
-        alarmId: "alarm"
-    });
-
-    state.history = new exports.History({ id: "history", load: true });
-    
-    var startInterval = function(type) {
-        var interval = exports.intervals[type];
-        state.history.add(interval.label);
-        
-        return state.timer.start(interval.duration)
-        .then(function(){ console.log("done"); })
-        .catch(function(){ console.log("aborted"); });
-    }
-
-    $("#button-start").click(startInterval.bind(this, "work"));
-    $("#short-break").click(startInterval.bind(this, "short"));
-    $("#long-break").click(startInterval.bind(this, "long"));
-
-    $("#interruption").click(function() { 
-        state.history.add("Interruption");
-    });
-
-    $("#stop").click(function() {
-        state.timer.stop();
-        state.history.add("Stop");
-    });
-};
-
-})();
-
-$(document).ready(tt.run);
-
-function minutesInSeconds(time) { 
-    return time * 60; 
-}
-</script>
 </body>
 </html>
