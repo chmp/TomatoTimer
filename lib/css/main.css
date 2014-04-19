@@ -63,10 +63,10 @@ h1 {
     background-color: #FFFFFF;
     border: 1px solid black;
     font-size: 1em;
-    margin: 0.5em;
+    margin: 0.25em;
     display: inline-block;
-    padding: 0.25em;
-    width: 7em;
+    padding: 0.25em 0.10em;
+    width: 6.0em;
 }
 
 #controls button:hover {
@@ -90,5 +90,11 @@ button#Stop {
     font-size: 0.75em;
     margin-top: 2em;
     color: #CCCCCC;
+}
+
+@media (max-width: 700px) {
+    #outer {
+        width: 95%;
+    }
 }
 
