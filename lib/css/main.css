@@ -26,7 +26,7 @@ h1 {
     font-size: 2em;
     width: 100%;
     text-align: center;
-    padding: 0.5em;
+    padding: 0.25em;
     margin: 0.75em 0em;
     height: 2em;
 }
@@ -41,6 +41,14 @@ h1 {
     color: #FFFFFF;
     background-color: #00AA00;
 
+}
+
+#timer.in-flow {
+    border: 0.1em solid #009900;
+}
+
+#timer:not(.in-flow) {
+    border: 0.1em solid #DD0000;
 }
 
 #controls {
