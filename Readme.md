@@ -1,10 +1,16 @@
 # Tomato Timer
 
-HTML5 utility to follow the [pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique). 
-The pomodor technique is a time-management tool, which tries to achive a flow state.
-It alternates between work and pause with fixed durations.
+This timer is a HTML5 utility to follow the [pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique), a productivity technique.
+It tries to facilitate getting into a flow state by dividing the work flow 
+into intervals of work and pauses with fixed durations.
 
 This timer allows the user to be track the remaining time in each interval. 
+The timer uses notifications to alert the user of the end of the 
+current interval, clicking on the notification automatically starts the next
+interval.
+The timer automatically cycles between the intervals: work (25min), short break (5min), work, short break, work, short break, work, long break (15min).
+
+This web app is offline enabled.
 
 ## External libraries
 
