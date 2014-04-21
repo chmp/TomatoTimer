@@ -12,6 +12,8 @@ The timer automatically cycles between the intervals: work (25min), short break 
 
 This web app is offline enabled.
 
+Give it a spin [here](http://chmp.github.io/TomatoTimer/).
+
 ## External libraries
 
 This projects uses the following external libraries 
