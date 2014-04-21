@@ -6,7 +6,7 @@ It alternates between work and pause with fixed durations.
 
 This timer allows the user to be track the remaining time in each interval. 
 
-Give it a spin[here](http://chmp.github.io/TomatoTimer/).
+Give it a spin [here](http://chmp.github.io/TomatoTimer/).
 
 ## External libraries
 
