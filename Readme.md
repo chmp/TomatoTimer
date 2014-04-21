@@ -19,6 +19,7 @@ Give it a spin [here](http://chmp.github.io/TomatoTimer/).
 This projects uses the following external libraries 
 
 - [jquery](https://jquery.com)
+- [QUnit](https://qunitjs.com/)
 - [Q](https://github.com/kriskowal/q)
 
 They are packaged under **contrib/**
