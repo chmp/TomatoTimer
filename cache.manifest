@@ -2,18 +2,18 @@ CACHE MANIFEST
 # 2014-04-20-v1
 
 CACHE:
-/contrib/jquery-2.1.0.min.js
-/contrib/q.min.js
+contrib/jquery-2.1.0.min.js
+contrib/q.min.js
 
-/index.html
-/lib/alarm.wav
-/lib/css/main.css
-/lib/js/config.js
-/lib/js/FlowMachine.js
-/lib/js/FlowTimer.js
-/lib/js/History.js
-/lib/js/main.js
-/lib/js/Notifications.js
-/lib/js/TimeAccess.js
-/lib/js/Timer.js
-/lib/js/TimerUI.js
+index.html
+lib/alarm.wav
+lib/css/main.css
+lib/js/config.js
+lib/js/FlowMachine.js
+lib/js/FlowTimer.js
+lib/js/History.js
+lib/js/main.js
+lib/js/Notifications.js
+lib/js/TimeAccess.js
+lib/js/Timer.js
+lib/js/TimerUI.js
