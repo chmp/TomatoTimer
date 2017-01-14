@@ -6,14 +6,14 @@
     font-size: 1em;
 }
 
-h1 {
+h1, h2 {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     
     color: #333333;
     width: 100%;
-    margin: 0em;
+    margin: 0.5em 0em 0em 0em;
     padding: 0em;
     text-align: right;
 }
@@ -59,21 +59,21 @@ h1 {
     text-align: center;
 }
 
-#controls button {
+button {
     background-color: #FFFFFF;
     border: 1px solid black;
     font-size: 1em;
     margin: 0.25em;
     display: inline-block;
     padding: 0.25em 0.10em;
-    width: 6.0em;
+    width: 5.8em;
 }
 
-#controls button:hover {
+button:hover {
     background-color: #F5F5F5;
 }
 
-#controls button:active {
+button:active {
     background-color: #CCCCCC;
 }
 
@@ -81,9 +81,36 @@ button#interruption {
     width: 3em;
 }
 
+button#configure {
+    width: 2em;
+}
+
 button#Stop {
     width: 3em;
     color: #CC0000;
+}
+
+button#save {
+    width: 2em;
+    float: right;
+}
+
+#options div {
+    margin 0.5em 0em 0em 0em;
+    width: 100%;
+}
+
+#options label {
+    display: inline-block;
+    width: 28%;
+    text-align: right;
+    margin: 0em 0.25em 0.5em 0em;
+}
+
+#options input {
+    display: inline-block;
+    width: 70%;
+    font-size: 1em;
 }
 
 #history {
