@@ -10,7 +10,7 @@ h1, h2 {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    
+
     color: #333333;
     width: 100%;
     margin: 0.5em 0em 0em 0em;
@@ -22,7 +22,7 @@ h1, h2 {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    
+
     font-size: 2em;
     width: 100%;
     text-align: center;
@@ -117,6 +117,18 @@ button#save {
     font-size: 0.75em;
     margin-top: 2em;
     color: #CCCCCC;
+}
+
+#footer {
+    color: #AAA;
+    margin-top: 1em;
+    width: 100%;
+    font-size: 0.8em;
+    text-align: right;
+}
+
+a {
+    color: #AAA;
 }
 
 @media (max-width: 700px) {

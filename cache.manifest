@@ -1,9 +1,10 @@
 CACHE MANIFEST
-# 2017-01-15-v0
+# 2017-01-16-v1
 
 CACHE:
 contrib/jquery-2.1.0.min.js
 contrib/q.min.js
+contrib/faviconx/faviconx.js
 
 index.html
 lib/alarm.wav
