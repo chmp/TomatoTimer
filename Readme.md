@@ -30,6 +30,19 @@ This projects uses the following external libraries
 
 FavIconX is packaged as `public//faviconx.js`
 
+## Developments
+
+```bash
+# run development server
+npm start
+
+# build production files
+npm run build
+
+# deploy to gh-pages
+npm run deploy
+```
+
 ## License
 
     The MIT License (MIT)
