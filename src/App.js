@@ -72,9 +72,9 @@ class App extends Component {
     return (
       <div className="outer">
         <h1>tomato timer</h1>
-        <Timer 
-          inFlow={this.state.inFlow} 
-          state={this.state.state} 
+        <Timer
+          inFlow={this.state.inFlow}
+          state={this.state.state}
           timeRemaining={this.state.timeRemaining}
         />
         <div className="controls">
@@ -138,20 +138,21 @@ class App extends Component {
     var title = "Finished " + this.state.state;
     var body = "Click to continue";
     var timeout = 60;
-    
+
     var notification = new Notification(title, {body: body});
-    notification.addEventListener("click", function() {
+    notification.addEventListener("click", function(ev) {
+      ev.preventDefault();
       notification.close();
       this.transition(null);
     }.bind(this));
-    
-    window.setTimeout(notification.close.bind(notification), 1000 * timeout);        
+
+    window.setTimeout(notification.close.bind(notification), 1000 * timeout);
   }
 }
 
 function formatTime(value) {
   return (typeof value !== "number") ? value : min2(~~value / 60) + ":" + min2(~~value % 60);
-  
+
   function min2(v) {
       v = "" + (~~v);
       return (v.length >= 2) ? v : ("0" + v);
