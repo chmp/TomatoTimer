@@ -28,7 +28,7 @@ This projects uses the following external libraries
 - [reactjs](https://reactjs.org/)
 - [faviconx](https://github.com/nicolasbize/faviconx)
 
-FavIconX is packaged under `src/contrib/faviconx`
+FavIconX is packaged as `public//faviconx.js`
 
 ## License
 

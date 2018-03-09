@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import FavIconX from './faviconx/faviconx';
 
 // set to 1 for debuging
 var minuteFactor = 60;
@@ -56,7 +55,7 @@ class App extends Component {
       Notification.requestPermission();
     }
 
-    FavIconX.config({
+    window.FavIconX.config({
       updateTitle: false,
       titleRenderer: function(v, t) { return t; },
       borderColor: '#222',
@@ -115,7 +114,7 @@ class App extends Component {
   }
   tick() {
     if(this.state.timeRemaining == null) {
-      FavIconX.setValue(100);
+      window.FavIconX.setValue(100);
       return;
     }
     var now = +new Date();
@@ -129,7 +128,7 @@ class App extends Component {
       timeRemaining: nextTimeRemaining,
     });
 
-    FavIconX.setValue(100 * (1 - nextTimeRemaining / duration));
+    window.FavIconX.setValue(100 * (1 - nextTimeRemaining / duration));
 
     if(didFinish) {
       this.postNotification();
