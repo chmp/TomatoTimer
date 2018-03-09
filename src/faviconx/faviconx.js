@@ -405,3 +405,5 @@ var FavIconX = (function() {
         }
     };
 })();
+
+export default FavIconX;

@@ -1,4 +1,4 @@
-#outer {
+.outer {
     height: 20em;
     width: 34em;
     margin: 5em auto;
@@ -18,7 +18,7 @@ h1, h2 {
     text-align: right;
 }
 
-#timer {
+.timer {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -31,27 +31,27 @@ h1, h2 {
     height: 2em;
 }
 
-#timer.stopped {
+.timer.stopped {
     color: #FFFFFF;
     background-color: #CC0000;
 
 }
 
-#timer.done, #timer.running {
+.timer:not(.stopped) {
     color: #FFFFFF;
     background-color: #00AA00;
 
 }
 
-#timer.in-flow {
+.timer.in-flow {
     border: 0.1em solid #009900;
 }
 
-#timer:not(.in-flow) {
+.timer:not(.in-flow) {
     border: 0.1em solid #DD0000;
 }
 
-#controls {
+.controls {
     font-size: 1em;
     width: 100%;
     padding: 0em;
@@ -77,58 +77,26 @@ button:active {
     background-color: #CCCCCC;
 }
 
-button#interruption {
-    width: 3em;
-}
-
-button#configure {
-    width: 2em;
-}
-
-button#Stop {
+button.stop {
     width: 3em;
     color: #CC0000;
 }
 
-button#save {
+button.save {
     width: 2em;
     float: right;
 }
 
-#options div {
-    margin 0.5em 0em 0em 0em;
-    width: 100%;
+a {
+    color: #AAA;
 }
 
-#options label {
-    display: inline-block;
-    width: 28%;
-    text-align: right;
-    margin: 0em 0.25em 0.5em 0em;
-}
-
-#options input {
-    display: inline-block;
-    width: 70%;
-    font-size: 1em;
-}
-
-#history {
-    font-size: 0.75em;
-    margin-top: 2em;
-    color: #CCCCCC;
-}
-
-#footer {
+.footer {
     color: #AAA;
     margin-top: 1em;
     width: 100%;
     font-size: 0.8em;
     text-align: right;
-}
-
-a {
-    color: #AAA;
 }
 
 @media (max-width: 700px) {
