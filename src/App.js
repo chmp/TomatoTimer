@@ -98,11 +98,6 @@ class App extends Component {
       Notification.requestPermission();
     }
 
-    // document why set state seems to be ok here
-    var history = localStorage.getItem('tomato-timer-history');
-    history = (history !== null) ? JSON.parse(history) : [];
-    this.setState({history: history});
-  
     window.FavIconX.config({
       updateTitle: false,
       titleRenderer: function(v, t) { return t; },
@@ -112,10 +107,19 @@ class App extends Component {
       fillColor: '#C00E0E',
       fillColor2: '#4E4EB0',
     });
+
+    // document why set state seems to be ok here
+    var history = localStorage.getItem('tt-history');
+    history = (history !== null) ? JSON.parse(history) : [];
+    this.setState({history: history});
+  
+    this.saveHistory = () => localStorage.setItem('tt-history', JSON.stringify(this.state.history));
+    window.addEventListener('beforeunload', this.saveHistory);
   }
   componentWillUnmount() {
     window.clearInterval(this.intervalId);
-    localStorage.setItem('tomato-timer-history', JSON.stringify(this.state.history));
+    window.removeEventListener('beforeunload', this.saveHistory);
+    this.saveHistory();
   }
   render() {
     return (
