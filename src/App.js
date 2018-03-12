@@ -33,7 +33,7 @@ class Timer extends Component {
     className += ' ' + this.props.state;
     var time = (this.props.timeRemaining !== null) ? formatTime(this.props.timeRemaining) : '';
 
-    var stateLabel = (this.props.state != 'stopped') ? 
+    var stateLabel = (this.props.state !== 'stopped') ? 
       '(' + config.labels[this.props.state] + ')' : 
       '';
 
@@ -57,7 +57,23 @@ class Controls extends Component {
     );
   }
   handleTransition(nextState) {
-    this.props.onTransition(nextState);
+    if(this.props.onTransition !== undefined) {
+      this.props.onTransition(nextState);
+    }
+  }
+}
+
+class History extends Component {
+  constructor(props) {
+    super(props);
+    this.key = 0;
+  }
+  render() {
+    // TODO: fix keys to prevent re-render of history items
+    var items = (this.props.items || []).map(function(state) {
+      return <div key={this.key++} className={'history-item ' + state}/>
+    }.bind(this));
+    return <div className='history'>{items}</div>
   }
 }
 
@@ -71,6 +87,7 @@ class App extends Component {
       state: 'stopped',
       inFlow: false,
       lastTick: null,
+      history: [],
     }
   }
   componentDidMount() {
@@ -81,6 +98,11 @@ class App extends Component {
       Notification.requestPermission();
     }
 
+    // document why set state seems to be ok here
+    var history = localStorage.getItem('tomato-timer-history');
+    history = (history !== null) ? JSON.parse(history) : [];
+    this.setState({history: history});
+  
     window.FavIconX.config({
       updateTitle: false,
       titleRenderer: function(v, t) { return t; },
@@ -93,6 +115,7 @@ class App extends Component {
   }
   componentWillUnmount() {
     window.clearInterval(this.intervalId);
+    localStorage.setItem('tomato-timer-history', JSON.stringify(this.state.history));
   }
   render() {
     return (
@@ -107,6 +130,7 @@ class App extends Component {
           nextState={this.state.nextState}
           onTransition={this.transition.bind(this)}
         />
+        <History items={this.state.history}/>
       </div>
     );
   }
@@ -129,16 +153,20 @@ class App extends Component {
       stateAfterNext = 'work';
     }
 
+    // use small offset to remove jitter in display
     var duration = config.duration[nextState];
+    duration = (duration !== null) ? duration - 0.1 : null;
+
+    var nextHistory = [nextState].concat(this.state.history).slice(0, 100);
 
     this.setState({
       inFlow: inFlow,
       state: nextState,
       nextState: stateAfterNext,
-      // use small offset to remove jitter in display
-      timeRemaining: (duration !== null) ? duration - 0.1 : null,
+      timeRemaining: duration,
       position: nextPosition,
       lastTick: +new Date(),
+      history: nextHistory,
     });
   }
   tick() {

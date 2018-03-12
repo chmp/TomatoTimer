@@ -91,6 +91,40 @@ a {
     color: #AAA;
 }
 
+.history {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 2em;
+    height: 5em;
+}
+
+.history-item {
+    border: 0.1px solid #AAA;
+    height: 0.5em;
+    margin: 0.1em;
+}
+
+.history-item.work {
+    width: 1.5em;
+    background-color: #00AA00;
+}
+
+.history-item.short {
+    width: 0.3em;
+    background-color: #F70;
+}
+
+.history-item.long {
+    width: 1.8em;
+    background-color: #FA0;
+}
+
+.history-item.stopped {
+    width: 0.5em;
+    background-color: #CC0000;
+}
+
 .footer {
     color: #AAA;
     margin-top: 1em;
