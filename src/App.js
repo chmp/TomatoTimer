@@ -17,6 +17,11 @@ var config = {
     'long': 30 * minuteFactor,
     'stopped': null,
   },
+  labels: {
+    work: 'work',
+    short: 'short break',
+    long: 'long break',
+  }
 };
 
 class Timer extends Component {
@@ -28,11 +33,31 @@ class Timer extends Component {
     className += ' ' + this.props.state;
     var time = (this.props.timeRemaining !== null) ? formatTime(this.props.timeRemaining) : '';
 
+    var stateLabel = (this.props.state != 'stopped') ? 
+      '(' + config.labels[this.props.state] + ')' : 
+      '';
+
     return (
       <div className={className}>
-        {time}
+        {time} {stateLabel}
       </div>
     );
+  }
+}
+
+class Controls extends Component {
+  render() {
+    return (
+      <div className="controls">
+        <button onClick={this.handleTransition.bind(this, null)}>Next ({this.props.nextState})</button>
+        <button onClick={this.handleTransition.bind(this, 'short')}>Short break</button>
+        <button onClick={this.handleTransition.bind(this, 'long')}>Long break</button>
+        <button onClick={this.handleTransition.bind(this, 'stopped')}>Stop</button>
+      </div>
+    );
+  }
+  handleTransition(nextState) {
+    this.props.onTransition(nextState);
   }
 }
 
@@ -40,6 +65,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      nextState: 'work',
       position: null,
       timeRemaining: null,
       state: 'stopped',
@@ -77,12 +103,10 @@ class App extends Component {
           state={this.state.state}
           timeRemaining={this.state.timeRemaining}
         />
-        <div className="controls">
-          <button onClick={this.transition.bind(this, null)}>Next</button>
-          <button onClick={this.transition.bind(this, 'short')}>Short break</button>
-          <button onClick={this.transition.bind(this, 'long')}>Long break</button>
-          <button onClick={this.transition.bind(this, 'stopped')}>Stop</button>
-        </div>
+        <Controls 
+          nextState={this.state.nextState}
+          onTransition={this.transition.bind(this)}
+        />
       </div>
     );
   }
@@ -94,20 +118,25 @@ class App extends Component {
       nextState = config.sequence[nextPosition];
     }
 
-    var inFlow;
+    var inFlow, stateAfterNext;
     if(config.sequence[nextPosition] === nextState) {
       inFlow = true;
+      stateAfterNext = config.sequence[(nextPosition + 1) % config.sequence.length];
     }
     else {
       inFlow = false;
       nextPosition = null;
+      stateAfterNext = 'work';
     }
+
+    var duration = config.duration[nextState];
 
     this.setState({
       inFlow: inFlow,
       state: nextState,
+      nextState: stateAfterNext,
       // use small offset to remove jitter in display
-      timeRemaining: config.duration[nextState] - 0.1,
+      timeRemaining: (duration !== null) ? duration - 0.1 : null,
       position: nextPosition,
       lastTick: +new Date(),
     });
@@ -136,7 +165,7 @@ class App extends Component {
   }
   postNotification() {
     var title = "Finished " + this.state.state;
-    var body = "Click to continue";
+    var body = "Click to continue with " + this.state.nextState;
     var timeout = 60;
 
     var notification = new Notification(title, {body: body});
