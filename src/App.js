@@ -8,8 +8,7 @@ var config = {
     'work', 'short',
     'work', 'short',
     'work', 'short',
-    'work', 'short',
-    'long',
+    'work', 'long',
   ],
   duration: {
     'work': 25 * minuteFactor,
