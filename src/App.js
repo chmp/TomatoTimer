@@ -9,17 +9,24 @@ var config = {
     'work', 'short',
     'work', 'short',
     'work', 'long',
+
+    'work', 'short',
+    'work', 'short',
+    'work', 'short',
+    'work', 'extralong',
   ],
   duration: {
     'work': 25 * minuteFactor,
     'short': 5 * minuteFactor,
-    'long': 30 * minuteFactor,
+    'long': 10 * minuteFactor,
+    'extralong': 30 * minuteFactor,
     'stopped': null,
   },
   labels: {
     work: 'work',
     short: 'short break',
     long: 'long break',
+    extralong: 'extra long break',
   }
 };
 
@@ -32,8 +39,8 @@ class Timer extends Component {
     className += ' ' + this.props.state;
     var time = (this.props.timeRemaining !== null) ? formatTime(this.props.timeRemaining) : '';
 
-    var stateLabel = (this.props.state !== 'stopped') ? 
-      '(' + config.labels[this.props.state] + ')' : 
+    var stateLabel = (this.props.state !== 'stopped') ?
+      '(' + config.labels[this.props.state] + ')' :
       '';
 
     return (
@@ -111,7 +118,7 @@ class App extends Component {
     var history = localStorage.getItem('tt-history');
     history = (history !== null) ? JSON.parse(history) : [];
     this.setState({history: history});
-  
+
     this.saveHistory = () => localStorage.setItem('tt-history', JSON.stringify(this.state.history));
     window.addEventListener('beforeunload', this.saveHistory);
   }
@@ -129,7 +136,7 @@ class App extends Component {
           state={this.state.state}
           timeRemaining={this.state.timeRemaining}
         />
-        <Controls 
+        <Controls
           nextState={this.state.nextState}
           onTransition={this.transition.bind(this)}
         />

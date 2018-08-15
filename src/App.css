@@ -116,6 +116,11 @@ a {
 }
 
 .history-item.long {
+    width: 0.6em;
+    background-color: #FA0;
+}
+
+.history-item.extralong {
     width: 1.8em;
     background-color: #FA0;
 }
