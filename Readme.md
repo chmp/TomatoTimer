@@ -22,22 +22,13 @@ Give it a spin [here](http://chmp.github.io/TomatoTimer/).
 - 2017-01-16: add progress indicator as icon
 - 2017-01-14: add option to configure intervals and their duration
 
-## External libraries
-
-This projects uses the following external libraries
-
-- [reactjs](https://reactjs.org/)
-- [faviconx](https://github.com/nicolasbize/faviconx)
-
-FavIconX is packaged as `public//faviconx.js`
-
-## Development
-
-```bash
-python -m http.server
-```
-
 ## License
+
+This projects uses [reactjs](https://reactjs.org/) and
+[faviconx](https://github.com/nicolasbize/faviconx). They are vendored in
+`vendor/`.
+
+The remaining code is licensed under:
 
     The MIT License (MIT)
 
