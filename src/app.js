@@ -116,10 +116,6 @@ var boostrap = (function () {
         componentDidMount() {
             this.intervalId = window.setInterval(this.tick.bind(this), 250); // ask for permission
 
-            if (window.Notification && Notification.permission !== "granted") {
-                Notification.requestPermission();
-            }
-
             window.FavIconX.config({
                 updateTitle: false,
                 titleRenderer: function (v, t) {
@@ -130,16 +126,14 @@ var boostrap = (function () {
                 shadowColor: '#EEEEEE',
                 fillColor: '#C00E0E',
                 fillColor2: '#4E4EB0'
-            }); // document why set state seems to be ok here
-
+            }); 
+            
+            // document why set state seems to be ok here
             var history = localStorage.getItem('tt-history');
             history = history !== null ? JSON.parse(history) : [];
-            this.setState({
-                history: history
-            });
+            this.setState({history});
 
             this.saveHistory = () => localStorage.setItem('tt-history', JSON.stringify(this.state.history));
-
             window.addEventListener('beforeunload', this.saveHistory);
         }
 
@@ -170,6 +164,11 @@ var boostrap = (function () {
         }
 
         transition(nextState) {
+            // NOTE: the permission must be requested from an event handler
+            if (window.Notification && Notification.permission !== "granted") {
+                Notification.requestPermission();
+            }
+
             var nextPosition = this.state.position !== null ? this.state.position + 1 : 0;
             nextPosition = nextPosition % config.sequence.length;
 
@@ -231,14 +230,12 @@ var boostrap = (function () {
             var title = "Finished " + this.state.state;
             var body = "Click to continue with " + this.state.nextState;
             var timeout = 60;
-            var notification = new Notification(title, {
-                body: body
-            });
-            notification.addEventListener("click", function (ev) {
+            var notification = new Notification(title, {body});
+            notification.addEventListener("click", ev => {
                 ev.preventDefault();
                 notification.close();
                 this.transition(null);
-            }.bind(this));
+            });
             window.setTimeout(notification.close.bind(notification), 1000 * timeout);
         }
     }
