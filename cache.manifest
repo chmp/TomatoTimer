@@ -1,0 +1,7 @@
+CACHE MANIFEST
+index.html
+src/app.js
+src/app.css
+vendor/faviconx.js
+vendor/react-dom.production.min.js
+vendor/react.production.min.js

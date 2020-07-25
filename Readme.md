@@ -1,15 +1,15 @@
 # Tomato Timer
 
-This timer is a HTML5 utility to follow the [pomodoro technique](https://en.wikipedia.org/wiki/Pomodoro_Technique), a productivity technique.
-It tries to facilitate getting into a flow state by dividing the work flow
-into intervals of work and pauses with fixed durations.
+This timer is a HTML5 utility to follow the [pomodoro
+technique](https://en.wikipedia.org/wiki/Pomodoro_Technique), a productivity
+technique. It tries to facilitate getting into a flow state by dividing the work
+flow into intervals of work and pauses with fixed durations.
 
-This timer allows the user to be track the remaining time in each interval.
-The timer uses notifications to alert the user of the end of the
-current interval, clicking on the notification automatically starts the next
-interval.
-The timer automatically cycles between the intervals: work (25min), short 
-break (5min), work, short break, work, short break, work, long break (15min).
+This timer allows the user to be track the remaining time in each interval. The
+timer uses notifications to alert the user of the end of the current interval,
+clicking on the notification automatically starts the next interval. The timer
+automatically cycles between the intervals: work (25min), short break (5min),
+work, short break, work, short break, work, long break (15min).
 
 This web app is offline enabled.
 
@@ -17,6 +17,7 @@ Give it a spin [here](http://chmp.github.io/TomatoTimer/).
 
 ## Change Log
 
+- 2020-05-25: use non-npm setup, clear history on stop
 - 2018-03-09: migrate to react, remove config + history
 - 2017-01-16: add progress indicator as icon
 - 2017-01-14: add option to configure intervals and their duration
@@ -30,24 +31,17 @@ This projects uses the following external libraries
 
 FavIconX is packaged as `public//faviconx.js`
 
-## Developments
+## Development
 
 ```bash
-# run development server
-npm start
-
-# build production files
-npm run build
-
-# deploy to gh-pages
-npm run deploy
+python -m http.server
 ```
 
 ## License
 
     The MIT License (MIT)
 
-    Copyright (c) 2014-2018 Christopher Prohm
+    Copyright (c) 2014 - 2020 Christopher Prohm
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -66,4 +60,3 @@ npm run deploy
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-
