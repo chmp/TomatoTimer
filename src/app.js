@@ -1,5 +1,6 @@
 var boostrap = (function () {
     "use strict"
+    const {createElement, useState, useEffect} = React;
 
     // set to 1 for debugging
     var minuteFactor = 60;
@@ -16,20 +17,25 @@ var boostrap = (function () {
             'work', 'extralong',
         ],
         duration: {
-            'work': 25 * minuteFactor,
-            'short': 5 * minuteFactor,
-            'long': 10 * minuteFactor,
-            'extralong': 30 * minuteFactor,
-            'stopped': null,
+            work: 25 * minuteFactor,
+            short: 5 * minuteFactor,
+            long: 10 * minuteFactor,
+            extralong: 30 * minuteFactor,
+            stopped: null,
         },
         labels: {
             work: 'work',
             short: 'short break',
             long: 'long break',
             extralong: 'extra long break',
+        },
+        shortLabels: {
+            work: "work",
+            short: "short",
+            long: "long",
+            extralong: "long",
         }
     };
-
     
     function formatTime(value) {
         return (typeof value !== "number") ? value : min2(~~value / 60) + ":" + min2(~~value % 60);
@@ -40,204 +46,185 @@ var boostrap = (function () {
         }
     }
 
-    class Timer extends React.Component {
-        render() {
-            var className = "timer";
+    function Timer(props) {
+        var className = (
+            "timer"
+            + (props.inFlow ? " in-flow" : "")
+            + " " + props.state
+        );
 
-            if (this.props.inFlow) {
-                className += ' in-flow';
+        var time = props.timeRemaining !== null ? formatTime(props.timeRemaining) : '';
+        var stateLabel = props.state !== 'stopped' ? '(' + config.labels[props.state] + ')' : '';
+        return createElement("div", {className}, time, " ", stateLabel);
+    }
+
+    function Controls(props) {
+        return createElement(
+            "div", {className: "controls"}, 
+            createElement(
+                "button", {onClick: handleTransition(null)}, "Next (", config.shortLabels[props.nextState], ")",
+            ), 
+            createElement(
+                "button", {onClick: handleTransition('short')}, "Short break",
+            ), 
+            createElement(
+                "button", {onClick: handleTransition('long')}, "Long break",
+            ), 
+            createElement(
+                "button", {onClick: handleTransition('stopped')}, "Stop",
+            ),
+        );
+
+        function handleTransition(nextState) {
+            if (props.onTransition !== undefined) {
+                return () => props.onTransition(nextState);
             }
-
-            className += ' ' + this.props.state;
-            var time = this.props.timeRemaining !== null ? formatTime(this.props.timeRemaining) : '';
-            var stateLabel = this.props.state !== 'stopped' ? '(' + config.labels[this.props.state] + ')' : '';
-            return React.createElement("div", {className}, time, " ", stateLabel);
+            return () => null;
         }
     }
 
-    class Controls extends React.Component {
-        render() {
-            return React.createElement(
-                "div", {className: "controls"}, 
-                React.createElement(
-                    "button", {onClick: this.handleTransition.bind(this, null)}, "Next (", this.props.nextState, ")",
-                ), 
-                React.createElement(
-                    "button", {onClick: this.handleTransition.bind(this, 'short')}, "Short break",
-                ), 
-                React.createElement(
-                    "button", {onClick: this.handleTransition.bind(this, 'long')}, "Long break",
-                ), 
-                React.createElement(
-                    "button", {onClick: this.handleTransition.bind(this, 'stopped')}, "Stop",
-                ),
-            );
-        }
-
-        handleTransition(nextState) {
-            if (this.props.onTransition !== undefined) {
-                this.props.onTransition(nextState);
-            }
-        }
+    function History(props) {
+        const items = (props.items || []).map(
+            (state, index) => React.createElement(
+                "div", {key: ("" + state + ":" + index), className: 'history-item ' + state},
+            )
+        );
+        return createElement("div", {className: "history"}, items);
     }
 
-    class History extends React.Component {
-        constructor(props) {
-            super(props);
-            this.key = 0;
-        }
+    function App() {
+        const [appState, setAppState] = useState({
+            nextState: 'work',
+            position: null,
+            timeRemaining: null,
+            state: 'stopped',
+            inFlow: false,
+            lastTick: null,
+            history: []
+        });
 
-        render() {
-            // TODO: fix keys to prevent re-render of history items
-            var items = (this.props.items || []).map(
-                state => React.createElement(
-                    "div", {key: this.key++, className: 'history-item ' + state},
-                )
-            );
-            return React.createElement("div", {className: "history"}, items);
-        }
-
-    }
-
-    class App extends React.Component {
-        constructor(props) {
-            super(props);
-            this.state = {
-                nextState: 'work',
-                position: null,
-                timeRemaining: null,
-                state: 'stopped',
-                inFlow: false,
-                lastTick: null,
-                history: []
-            };
-        }
-
-        componentDidMount() {
-            this.intervalId = window.setInterval(this.tick.bind(this), 250); // ask for permission
-
-            window.FavIconX.config({
-                updateTitle: false,
-                titleRenderer: function (v, t) {
-                    return t;
+        const updateFavIcon = useFavIconX();
+        useTimer(tick);
+        
+        return createElement(
+            "div", {className: "outer"}, 
+            createElement("h1", null, "tomato timer"), 
+            createElement(
+                Timer, 
+                {
+                    inFlow: appState.inFlow, 
+                    state: appState.state, 
+                    timeRemaining: appState.timeRemaining,
                 },
-                borderColor: '#222',
-                borderWidth: 1,
-                shadowColor: '#EEEEEE',
-                fillColor: '#C00E0E',
-                fillColor2: '#4E4EB0'
-            }); 
+            ), 
+            createElement(
+                Controls, 
+                {nextState: appState.nextState, onTransition: transition},
+            ), 
+            createElement(History, {items: appState.history}),
+        );
             
-            // document why set state seems to be ok here
-            var history = localStorage.getItem('tt-history');
-            history = history !== null ? JSON.parse(history) : [];
-            this.setState({history});
-
-            this.saveHistory = () => localStorage.setItem('tt-history', JSON.stringify(this.state.history));
-            window.addEventListener('beforeunload', this.saveHistory);
-        }
-
-        componentWillUnmount() {
-            window.clearInterval(this.intervalId);
-            window.removeEventListener('beforeunload', this.saveHistory);
-            this.saveHistory();
-        }
-
-        render() {
-            return React.createElement(
-                "div", {className: "outer"}, 
-                React.createElement("h1", null, "tomato timer"), 
-                React.createElement(
-                    Timer, 
-                    {
-                        inFlow: this.state.inFlow, 
-                        state: this.state.state, 
-                        timeRemaining: this.state.timeRemaining,
-                    },
-                ), 
-                React.createElement(
-                    Controls, 
-                    {nextState: this.state.nextState, onTransition: this.transition.bind(this)},
-                ), 
-                React.createElement(History, {items: this.state.history}),
-            );
-        }
-
-        transition(nextState) {
+        function transition(nextState) {
             // NOTE: the permission must be requested from an event handler
             if (window.Notification && Notification.permission !== "granted") {
                 Notification.requestPermission();
             }
 
-            var nextPosition = this.state.position !== null ? this.state.position + 1 : 0;
-            nextPosition = nextPosition % config.sequence.length;
-
-            if (nextState === null) {
-                nextState = config.sequence[nextPosition];
-            }
-
-            var inFlow, stateAfterNext;
-
-            if (config.sequence[nextPosition] === nextState) {
-                inFlow = true;
-                stateAfterNext = config.sequence[(nextPosition + 1) % config.sequence.length];
-            } else {
-                inFlow = false;
-                nextPosition = null;
-                stateAfterNext = 'work';
-            } 
-            // use small offset to remove jitter in display
-            var duration = config.duration[nextState];
-            duration = duration !== null ? duration - 0.1 : null;
-
-            // clear the history when the timer is stopped
-            var nextHistory = (nextState == "stopped") ? [] : [nextState].concat(this.state.history).slice(0, 100);
-            
-            this.setState({
-                inFlow: inFlow,
-                state: nextState,
-                nextState: stateAfterNext,
-                timeRemaining: duration,
-                position: nextPosition,
-                lastTick: +new Date(),
-                history: nextHistory
-            });
+            setAppState(stateTransition(config, appState, nextState));
         }
 
-        tick() {
-            if (this.state.timeRemaining == null) {
-                window.FavIconX.setValue(100);
+        function tick() {
+            if (appState.timeRemaining == null) {
+                updateFavIcon(100);
                 return;
             }
-
+            
+            // TODO: use now - started to get compute timeRemaining, instead of counting down
             var now = +new Date();
-            var delta = this.state.lastTick !== null ? (now - this.state.lastTick) / 1000 : 0.250;
-            var nextTimeRemaining = Math.max(0, this.state.timeRemaining - delta);
-            var didFinish = this.state.timeRemaining > 0 && nextTimeRemaining === 0;
-            var duration = config.duration[this.state.state];
-            this.setState({
-                lastTick: now,
-                timeRemaining: nextTimeRemaining
-            });
-            window.FavIconX.setValue(100 * (1 - nextTimeRemaining / duration));
+            var delta = appState.lastTick !== null ? (now - appState.lastTick) / 1000 : 0.250;
+            var nextTimeRemaining = Math.max(0, appState.timeRemaining - delta);
+            var didFinish = appState.timeRemaining > 0 && nextTimeRemaining === 0;
+            var duration = config.duration[appState.state];
+            
+            const update = {};
+            update.lastTick = now;
+            update.timeRemaining = nextTimeRemaining;
+
+            setAppState(Object.assign({}, appState, update));
+            updateFavIcon(100 * (1 - nextTimeRemaining / duration));
 
             if (didFinish) {
-                this.postNotification();
+                postNotification(appState.state, appState.nextState, transition);
             }
         }
+    }
 
-        postNotification() {
-            var title = "Finished " + this.state.state;
-            var body = "Click to continue with " + this.state.nextState;
-            var timeout = 60;
-            var notification = new Notification(title, {body});
-            notification.addEventListener("click", ev => {
-                ev.preventDefault();
-                notification.close();
-                this.transition(null);
+    // TOOD: clean up meaning between app state and pomodoro state 
+    // TODO: document the implementation
+    function stateTransition(config, appState, nextState) {
+        const newPosition = (appState.position !== null) ? (appState.position + 1) % config.sequence.length : 0;
+        const newState = nextState !== null ? nextState : config.sequence[newPosition];
+        const update = {};
+
+        if (config.sequence[newPosition] === newState) {
+            update.inFlow = true;
+            update.nextState = config.sequence[(newPosition + 1) % config.sequence.length];
+            update.position = newPosition;
+        } else {
+            update.inFlow = false;
+            update.position = null;
+            update.nextState = 'work';
+        } 
+        
+        // use small negative offset to remove jitter in display
+        update.timeRemaining = config.duration[newState];
+        update.timeRemaining = update.timeRemaining !== null ? update.timeRemaining - 0.1 : null;
+
+        update.state = newState;
+        update.lastTick = +new Date();
+
+        // clear the history when the timer is stopped
+        update.history = (nextState == "stopped") ? [] : [newState].concat(appState.history).slice(0, 100);
+
+        return Object.assign({}, appState, update);
+    }
+
+    // custom effect handlers
+    function useTimer(tick) {
+        useEffect(() => {
+            const intervalId = window.setInterval(tick, 250);
+            return () => window.clearInterval(intervalId);
+        })
+    }
+
+    function useFavIconX() {
+        useState(() => {
+            window.FavIconX.config({
+                updateTitle: false,
+                titleRenderer: (_, t) => t,
+                borderColor: '#222',
+                borderWidth: 1,
+                shadowColor: '#EEEEEE',
+                fillColor: '#C00E0E',
+                fillColor2: '#4E4EB0'
             });
-            window.setTimeout(notification.close.bind(notification), 1000 * timeout);
-        }
+        });
+        return (value) => {
+            window.FavIconX.setValue(value)
+        };
+    }
+
+    function postNotification(state, nextState, transition) {
+        var title = "Finished " + state;
+        var body = "Click to continue with " + nextState;
+        var timeout = 60;
+        var notification = new Notification(title, {body});
+        notification.addEventListener("click", ev => {
+            ev.preventDefault();
+            notification.close();
+            transition(null);
+        });
+        window.setTimeout(notification.close.bind(notification), 1000 * timeout);
     }
 
     return function boostrap() {
